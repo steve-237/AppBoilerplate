@@ -4,8 +4,8 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "dev": "APP_ENV=development expo start",
-    "dev:staging": "APP_ENV=staging expo start",
+    "dev": "cross-env APP_ENV=development expo start",
+    "dev:staging": "cross-env APP_ENV=staging expo start",
     "build": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest",
@@ -46,6 +46,7 @@
     "jest-expo": "^53.0.14",
     "react-test-renderer": "19.0.0",
     "sharp": "^0.34.5",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "cross-env": "^7.0.3"
   }
 }
