@@ -6,7 +6,7 @@
     "dev": "convex dev",
     "build": "echo 'Backend: run pnpm dev to generate Convex types before type-checking'",
     "typecheck": "tsc --noEmit",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts",
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts",
     "test": "vitest run"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "@edge-runtime/vm": "^5.0.0",
     "convex-test": "^0.0.41",
     "typescript": "~5.8.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "cross-env": "^7.0.3"
   }
 }

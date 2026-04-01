@@ -32,6 +32,7 @@
   - [Feature Module Structure](#feature-module-structure)
   - [Database Schema](#database-schema)
 - [Prerequisites](#prerequisites)
+- [Cross-Platform Setup Guide](#cross-platform-setup-guide)
 - [Getting Started](#getting-started)
   - [1. Create Your Project](#1-create-your-project)
   - [2. Rename the App](#2-rename-the-app)
@@ -303,6 +304,10 @@ Before you begin, make sure you have:
 
 > **iOS only?** Skip Android Studio. **Android only?** Skip Xcode.
 
+## Cross-Platform Setup Guide
+
+For a full OS-specific setup and run guide (macOS, Windows, Linux), see [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
+
 ---
 
 ## Getting Started
@@ -314,7 +319,13 @@ Click **"Use this template"** on GitHub, or clone directly:
 ```bash
 git clone https://github.com/diaspoai/AppBoilerplate.git my-app
 cd my-app
-rm -rf .git && git init  # Start with a fresh history
+rm -rf .git && git init  # Start with a fresh history (macOS/Linux)
+```
+
+```powershell
+git clone https://github.com/diaspoai/AppBoilerplate.git my-app
+cd my-app
+Remove-Item -Recurse -Force .git; git init  # Start with a fresh history (Windows PowerShell)
 ```
 
 ### 2. Rename the App
@@ -373,6 +384,25 @@ LC_ALL=C find . -type f \
 
 > After renaming, regenerate assets: `cd apps/mobile && pnpm generate:assets`
 
+#### Quick one-liner (Windows PowerShell)
+
+```powershell
+Get-ChildItem -Recurse -File | Where-Object {
+  $_.FullName -notmatch '\\node_modules\\|\\.git\\' -and
+  $_.Name -ne 'pnpm-lock.yaml' -and
+  $_.Extension -ne '.png'
+} | ForEach-Object {
+  $content = Get-Content $_.FullName -Raw
+  $content = $content.Replace('AppBoilerplate', 'YourApp')
+  $content = $content.Replace('app-boilerplate', 'your-app')
+  $content = $content.Replace('com.appboilerplate.app', 'com.yourcompany.yourapp')
+  $content = $content.Replace('com.appboilerplate.mobile', 'com.yourcompany.yourapp')
+  $content = $content.Replace('appboilerplate://', 'yourapp://')
+  $content = $content.Replace('appboilerplate.dev', 'yourapp.com')
+  Set-Content $_.FullName $content
+}
+```
+
 ### 3. Install Dependencies
 
 ```bash
@@ -388,6 +418,11 @@ Copy the example env files and fill in your values:
 ```bash
 # Mobile app
 cp apps/mobile/.env.development.example apps/mobile/.env.development
+```
+
+```powershell
+# Mobile app (Windows PowerShell)
+Copy-Item apps/mobile/.env.development.example apps/mobile/.env.development
 ```
 
 Edit `apps/mobile/.env.development`:
@@ -491,6 +526,8 @@ pnpm expo start
 ```
 
 Scan the QR code with Expo Go, or press `i` for iOS Simulator / `a` for Android Emulator.
+
+> On Windows, use Android development (`pnpm expo run:android`) because iOS simulators require macOS + Xcode.
 
 ---
 
@@ -875,6 +912,13 @@ The `transformIgnorePatterns` in `jest.config.js` includes `\\.pnpm` in the nega
 cd apps/mobile
 rm -rf ios android
 pnpm expo prebuild --platform ios --clean
+```
+
+```powershell
+# Clean and rebuild (Windows PowerShell)
+cd apps/mobile
+Remove-Item -Recurse -Force ios, android
+pnpm expo prebuild --platform android --clean
 ```
 
 ### `jest-expo` version mismatch
